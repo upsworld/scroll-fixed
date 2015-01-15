@@ -1,0 +1,159 @@
+html {
+ 	font-family: Helvetica;
+ 	height: 100%;
+}
+
+html, body {
+	position: relative;
+	margin: 0;
+	background: whitesmoke;
+}
+
+body {
+/*	background-image: url('http://1.bp.blogspot.com/_lhHkzwM0ybw/S_P3YCzz1OI/AAAAAAAAAhA/O6dGpIgZmFo/s1600/rain+005.JPG');
+	background-image: url('http://img.wallpaperstock.net:81/sch%C3%B6ner-fr%C3%BChling-wallpapers_23624_1920x1200.jpg');
+	background-image: url('http://d12vb6dvkz909q.cloudfront.net/uploads/galleries/27621/singin-in-the-rain-1.jpg'); */
+	background-size:cover;
+	background-attachment: fixed;
+	background: black;
+}
+
+h1,h2 {
+	position: absolute;
+	top: 5%;
+	left: 5%;
+	color:white;
+	text-transform: uppercase;
+	letter-spacing: -1px;
+}
+
+h1 span, h2 span {
+	background-color: black;
+	padding: 0 0.1em;
+	border-radius:3px;
+}
+h2 {
+	top: initial;
+	left: initial;
+	bottom: 5%;
+	right: 5%;
+	text-align: right;
+	letter-spacing: 1px;
+}
+
+.content_container {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left:0;
+	/*perspective: 1000px; */
+	perspective-origin: 50% 50%;
+}
+
+section {
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+	white-space: nowrap;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: none;
+	backface-visibility: hidden;
+}
+
+section.left,
+section.right,
+section.active {
+	display: block;
+}
+
+.rounded_button {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	font-size: 3em;
+	transition: 0.5s ease;
+	opacity: 0.5;
+	opacity: 1;
+	background-size: cover;
+}
+
+.rounded_button:hover {
+}
+
+.rounded_button div {
+	left: 17%;
+	top: 17%;
+	position: absolute;
+	display: block;
+	color: white;
+}
+
+body.snaps .rounded_button div{
+	opacity: 0;
+	transition: 0.3s ease;
+}
+
+body.snaps.snapped .rounded_button div {
+	opacity: 1;
+	transition: 0.5s ease-in;
+}
+
+section:nth-child(8n+1) .rounded_button {
+	background-image: url('http://www.v3wall.com/wallpaper/1366_768/1004/1366_768_20100404123403401992.jpg');
+}
+
+section:nth-child(8n+2) .rounded_button {
+	right: 0;
+	left: initial;
+	background-image: url('http://kenny-pool.de/wp-content/uploads/2013/08/Landschaft_Galerie-4.jpg');
+}
+section:nth-child(8n+3) .rounded_button {
+	bottom: 0;
+	top: initial;
+	background-image: url('http://www.fotos.sc/img2/u/fotozeck/h/Landschaft__Kornfeld__Baum__Feld__Aussicht.jpg');
+}
+section:nth-child(8n+4) .rounded_button {
+	bottom: 0;
+	right: 0;
+	left: initial;
+	top: initial;
+	background-image:url('http://www.v3wall.com/wallpaper/1680_1050/1003/1680_1050_20100305091710198217.jpg');
+}
+section:nth-child(8n+5) .rounded_button {
+	bottom: 0;
+	right: 0;
+	left: initial;
+	top: initial;
+	background-image:url('http://static.pagenstecher.de/uploads/f/f3/f30/f306/Landschaft_278.JPG');
+}
+section:nth-child(8n+6) .rounded_button {
+	bottom: 0;
+	right: 0;
+	left: initial;
+	top: initial;
+	background-image:url('http://wallpaperpixel.com/de/download/vintage-gras-landschaft-7680x4320.jpg');
+}
+section:nth-child(8n+7) .rounded_button {
+	bottom: 0;
+	right: 0;
+	left: initial;
+	top: initial;
+	background-image:url('http://img.galerie.chip.de/imgserver/communityimages/774400/774477/original_EF84D0668112A82C846B2ED4CB58105C.jpg');
+}
+section:nth-child(8n+8) .rounded_button {
+	bottom: 0;
+	right: 0;
+	left: initial;
+	top: initial;
+	background-image:url('http://1.bp.blogspot.com/-Vi3ZJja0l5k/TyUyXHSgDkI/AAAAAAAAAz8/oxDbuXn7X7Y/s1600/herbst-landschaft-bild.jpg');
+}
+
+#references .rounded_button div {
+	left: 47%;
+	right: initial;
+	transform: translate(0%,0);
+}
