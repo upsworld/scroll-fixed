@@ -23,10 +23,10 @@ $(function() {
 
 		sections.removeClass('active left right left-outside right-outside');
 
-		transitionScrollX(activePage, activePageScroll);
+		//transitionScrollX(activePage, activePageScroll);
 		//transitionFade(activePage, activePageScroll);
 		//transitionCubeX(activePage, activePageScroll);
-		//transitionCubeY(activePage, activePageScroll);
+		transitionCubeY(activePage, activePageScroll);
 
 
 	}
@@ -55,7 +55,8 @@ $(function() {
 		contentContainer.find('.content_wrapper').css({
 			'transform': 'translate3d(0,0,' + $(window).width() / -2 + 'px)',
 			'height': '100%',
-			'transform-style': 'preserve-3d'
+			'transform-style': 'preserve-3d',
+			'backface-visibility': 'hidden'
 		});
 		$(sections[activePage]).addClass('active').css({
 			'transform': 'rotateY(' + -90*activePageScroll+ 'deg) translate3d(0,0,' + $(window).width() / 2 +'px)',
@@ -102,6 +103,7 @@ $(function() {
 	});
 
 	$(document).scroll(function(event) {
+		resizeScroller();
 		$('body').addClass('scrolling');
 		$('body').removeClass('snapped');
 		activePage = parseInt((scrollY+distanceForOnePage/2) / distanceForOnePage);

@@ -49,6 +49,7 @@ h2 {
 	left:0;
 	/*perspective: 1000px; */
 	perspective-origin: 50% 50%;
+	backface-visibility: hidden;
 }
 
 section {
@@ -103,7 +104,7 @@ body.snaps.snapped .rounded_button div {
 }
 
 section:nth-child(8n+1) .rounded_button {
-	background-image: url('http://www.v3wall.com/wallpaper/1366_768/1004/1366_768_20100404123403401992.jpg');
+	background-image: url('http://www.fewo-alpenwelt.de/img/wallpaper/landschaft.jpg');
 }
 
 section:nth-child(8n+2) .rounded_button {
@@ -121,7 +122,7 @@ section:nth-child(8n+4) .rounded_button {
 	right: 0;
 	left: initial;
 	top: initial;
-	background-image:url('http://www.v3wall.com/wallpaper/1680_1050/1003/1680_1050_20100305091710198217.jpg');
+	background-image:url('http://img.wallpaperstock.net:81/sommer-landschaft-wallpapers_37119_2560x1600.jpg');
 }
 section:nth-child(8n+5) .rounded_button {
 	bottom: 0;
