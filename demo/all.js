@@ -2,9 +2,11 @@ $(function() {
 	console.log('working' + $(window).height());
 
 	var scrollerArea = $('.scroller_area'),
+		scrollAreas = [],
+		scrollArea,
 		contentContainer = $('.content_container'),
 		sections = $('section'),
-		distanceForOnePage = $(window).height()/1,
+		distanceForOnePage = $(window).height(),
 		activePage = 0,
 		body = $("body"),
 		snapsToPage = true;
@@ -12,24 +14,107 @@ $(function() {
 	if(snapsToPage) {
 		$('body').addClass('snaps snapped');
 	}
-	console.log('y');
+	var scrollArea = function(start, end, section, type) {
+		this.start = start;
+		this.end = end;
+		this.type = type;
+		this.section = section;
+	};
+
+	var activeScrollArea = function(scrollY) {
+		for(var i = 0; i < scrollAreas.length; i++) {
+			if((scrollY < 0 || scrollY >= scrollAreas[i].start) && scrollY < scrollAreas[i].end) {
+				console.log(scrollY);
+				return scrollAreas[i];
+			}
+		}
+		return "error in calculation";
+	};
+
+  var getSnapPosition = function(activePage) {
+    for(var i = 0; i < scrollAreas.length; i++) {
+      console.log(scrollAreas[i].section, scrollAreas[i].type, activePage);
+      if(scrollAreas[i].section == activePage) {
+        if(scrollAreas[i].type == 'content') {
+          return scrollY > scrollAreas[i].start ? scrollAreas[i].end : scrollAreas[i].start;
+        }
+        else {
+          return scrollAreas[i].start;
+        }
+      }
+    }
+    return "error";
+  }
 
 	var resizeScroller = function() {
-		scrollerArea.height(sections.length *  distanceForOnePage);
+
+		var calcPosition = 0;
+      contentHeight = 0;
+
+		scrollAreas = [];
+
+		sections.each(function(i) {
+			var contentOffset = $(this).find('.content').outerHeight() - $(this).outerHeight() > 0 ? $(this).find('.content').outerHeight() -$(this).outerHeight() : 0,
+        contentStart = calcPosition,
+        contentEnd = contentOffset > 0 ? contentStart + contentOffset : contentStart,
+        transitionStart = contentEnd,
+				transitionEnd = transitionStart + distanceForOnePage;
+
+      if(contentOffset > 0 ) {
+        var contentArea = new scrollArea(contentStart, contentEnd, i, "content");
+        scrollAreas.push(contentArea);
+        contentHeight = contentHeight + contentOffset;
+      }
+
+			var transitionArea = new scrollArea(transitionStart, transitionEnd, i, "transition");
+			scrollAreas.push(transitionArea);
+
+			calcPosition = transitionEnd;
+		});
+
+    scrollerArea.height(sections.length *  distanceForOnePage + contentHeight);
+
+		console.log(scrollAreas);
+		console.log('Number of Sections ' + sections.length, 'distanceForOnePage ' + distanceForOnePage);
 	}
-	var renderPage = function(scrollX,scrollY) {
+
+	var renderPage = function(scrollX,scrollY, activeArea) {
 			globalScroll = (scrollY+distanceForOnePage/2) / distanceForOnePage,
-			activePageScroll = (globalScroll - activePage - 0.5);
+			activePageScroll = activeArea ? (scrollY - activeArea.start) / distanceForOnePage : 0;
+
+    //console.log("old", globalScroll - activePage);
+    //console.log("new", activeArea ? (scrollY - activeArea.start) / distanceForOnePage : 0);
+
+    console.log(activeArea.type, activePageScroll);
+
+    var contentTop = 0;
+
+    if(activeArea.type == "content") {
+      activePageScroll = 0;
+      contentTop = activeArea.start - scrollY;
+      contentScroll(activeArea.section, contentTop);
+
+      console.log("AAST", activeArea.start, scrollY);
+    }
+
 
 		sections.removeClass('active left right left-outside right-outside');
 
-		//transitionScrollX(activePage, activePageScroll);
-		//transitionFade(activePage, activePageScroll);
-		//transitionCubeX(activePage, activePageScroll);
-		transitionCubeY(activePage, activePageScroll);
+    //transitionCubeY(activeArea.section, activePageScroll);
+
+
+		//transitionScrollX(activeArea.section, activePageScroll);
+		//transitionFade(activeArea.section, activePageScroll);
+		transitionCubeX(activeArea.section, activePageScroll);
 
 
 	}
+
+  var contentScroll = function (activePage, activePageScroll) {
+    $(sections[activePage]).find('.content').css({'top':activePageScroll, 'bottom': 'initial'});
+    $(sections[activePage-1]).find('.content').css({'top': 'initial','bottom': 0});
+    $(sections[activePage+1]).find('.content').css({'top': 0,'bottom': 'initial'});
+  }
 
 	var transitionFade = function(activePage, activePageScroll) {
 
@@ -103,45 +188,65 @@ $(function() {
 	});
 
 	$(document).scroll(function(event) {
-		resizeScroller();
+		//resizeScroller();
+
+		var activeArea = activeScrollArea(scrollY);
+
+    console.log(activeScrollArea(scrollY), scrollY);
+
 		$('body').addClass('scrolling');
 		$('body').removeClass('snapped');
-		activePage = parseInt((scrollY+distanceForOnePage/2) / distanceForOnePage);
+
+    if(activeArea.type == "content") {
+      activePage = activeArea.section;
+    }
+    if(activeArea.type == "transition") {
+      var breakpoint = activeArea.start + distanceForOnePage/2;
+      console.log('breakpoint' + breakpoint, 'scrollY' + scrollY);
+      if(scrollY < breakpoint) {
+        console.log('a1');
+        activePage = activeArea.section
+      }
+      else {
+        activePage = activeArea.section + 1;
+        console.log('a2');
+      }
+
+      if(snapsToPage) {
+        clearTimeout($.data(this, 'scrollTimer'));
+          $.data(this, 'scrollTimer', setTimeout(function() {
+            var targetScroll = getSnapPosition(activePage,scrollY);
+            console.log('targ' + targetScroll, scrollY);
+            if($(body).scrollTop() < targetScroll -1.5 || $(body).scrollTop() > targetScroll + 1.5) {
+            body.animate({scrollTop: targetScroll }, 200, 'swing', function() {
+              body.stop();
+              body.scrollTop(targetScroll);
+              $(document).scrollTop(targetScroll);
+            });
+          }
+          else {
+            body.stop();
+            $('body').addClass('snapped');
+            $('body').removeClass('scrolling');
+            //console.log('snapped');
+          }
+        }, 300));
+      }
+    }
+
 		if($(body).scrollTop() < 0) {
 			$(body).scrollTop(0);
-			console.log('top');
 		}
 		if($(body).scrollTop() > $(body).height() - $(window).height()) {
 			$(body).scrollTop($(body).height());
-			console.log('bottom');
 		}
-		renderPage($(window).scrollLeft(), $(window).scrollTop());
+		renderPage($(window).scrollLeft(), $(window).scrollTop(), activeArea);
 	});
 
-	$(document).on('scroll', function(event) {
-		foo = event;
-		//console.log(event.type, $(body).scrollTop(), activePage * distanceForOnePage -1.5, $(body).scrollTop() < activePage * distanceForOnePage-1.5, $(body).scrollTop() > activePage * distanceForOnePage + 1.5);
-		if(snapsToPage) {
-			clearTimeout($.data(this, 'scrollTimer'));
-		    $.data(this, 'scrollTimer', setTimeout(function() {
-		    	if($(body).scrollTop() < activePage * distanceForOnePage -1.5 || $(body).scrollTop() > activePage * distanceForOnePage + 1.5) {
-					body.animate({scrollTop: activePage * distanceForOnePage }, 200, 'swing', function() {
-						body.stop();
-						body.scrollTop(activePage * distanceForOnePage);
-						$(document).scrollTop(activePage * distanceForOnePage);
-					});
-				}
-				else {
-					body.stop();
-					$('body').addClass('snapped');
-					$('body').removeClass('scrolling');
-					//console.log('snapped');
-				}
-		    }, 300));
-		}
-	});
-
-
-	renderPage(0,0);
-	resizeScroller();
+  $( document ).ready(function() {
+    resizeScroller();
+  	renderPage(0,0, scrollAreas[0]);
+    $('section').addClass('measured');
+  });
+	//setTimeout(function() { resizeScroller() }, 100);
 });

@@ -61,8 +61,12 @@ section {
 	position: absolute;
 	left: 0;
 	top: 0;
-	display: none;
+	background-size: cover;
 	backface-visibility: hidden;
+}
+
+section.measured {
+	display: none;
 }
 
 section.left,
@@ -71,89 +75,77 @@ section.active {
 	display: block;
 }
 
-.rounded_button {
+.content {
 	width: 100%;
-	height: 100%;
+	min-height: 100%;
 	position: absolute;
-	font-size: 3em;
+	font-size: 1em;
 	transition: 0.5s ease;
 	opacity: 0.5;
 	opacity: 1;
-	background-size: cover;
+	white-space: normal;
+	padding: 10%;
+	box-sizing: border-box;
 }
 
-.rounded_button:hover {
+.content p {
+	max-width: 500px;
+	color: white;
 }
 
-.rounded_button div {
+.content:hover {
+}
+
+.content div {
 	left: 17%;
 	top: 17%;
-	position: absolute;
 	display: block;
 	color: white;
 }
 
-body.snaps .rounded_button div{
+body.snaps .content div{
 	opacity: 0;
 	transition: 0.3s ease;
 }
 
-body.snaps.snapped .rounded_button div {
+body.snaps.snapped .content div {
 	opacity: 1;
 	transition: 0.5s ease-in;
 }
 
-section:nth-child(8n+1) .rounded_button {
+section:nth-child(8n+1) {
 	background-image: url('http://www.fewo-alpenwelt.de/img/wallpaper/landschaft.jpg');
 }
 
-section:nth-child(8n+2) .rounded_button {
-	right: 0;
-	left: initial;
+section:nth-child(8n+2) {
 	background-image: url('http://kenny-pool.de/wp-content/uploads/2013/08/Landschaft_Galerie-4.jpg');
 }
-section:nth-child(8n+3) .rounded_button {
-	bottom: 0;
-	top: initial;
+section:nth-child(8n+3) {
 	background-image: url('http://www.fotos.sc/img2/u/fotozeck/h/Landschaft__Kornfeld__Baum__Feld__Aussicht.jpg');
 }
-section:nth-child(8n+4) .rounded_button {
-	bottom: 0;
-	right: 0;
-	left: initial;
-	top: initial;
+section:nth-child(8n+4) {
 	background-image:url('http://img.wallpaperstock.net:81/sommer-landschaft-wallpapers_37119_2560x1600.jpg');
 }
-section:nth-child(8n+5) .rounded_button {
-	bottom: 0;
-	right: 0;
-	left: initial;
-	top: initial;
+section:nth-child(8n+5) {
 	background-image:url('http://static.pagenstecher.de/uploads/f/f3/f30/f306/Landschaft_278.JPG');
 }
-section:nth-child(8n+6) .rounded_button {
-	bottom: 0;
-	right: 0;
-	left: initial;
-	top: initial;
+section:nth-child(8n+6) {
 	background-image:url('http://wallpaperpixel.com/de/download/vintage-gras-landschaft-7680x4320.jpg');
 }
-section:nth-child(8n+7) .rounded_button {
-	bottom: 0;
-	right: 0;
-	left: initial;
-	top: initial;
+section:nth-child(8n+7) {
 	background-image:url('http://img.galerie.chip.de/imgserver/communityimages/774400/774477/original_EF84D0668112A82C846B2ED4CB58105C.jpg');
 }
-section:nth-child(8n+8) .rounded_button {
-	bottom: 0;
-	right: 0;
-	left: initial;
-	top: initial;
+section:nth-child(8n+8) {
 	background-image:url('http://1.bp.blogspot.com/-Vi3ZJja0l5k/TyUyXHSgDkI/AAAAAAAAAz8/oxDbuXn7X7Y/s1600/herbst-landschaft-bild.jpg');
 }
 
-#references .rounded_button div {
+/*section .content {
+	background-image: none !important;
+	background-color: red;
+	transition: 0.1s linear;
+}*/
+
+#references .content div {
 	left: 47%;
 	right: initial;
 	transform: translate(0%,0);
