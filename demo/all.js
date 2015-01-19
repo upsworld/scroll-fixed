@@ -82,10 +82,10 @@ $(function() {
 			globalScroll = (scrollY+distanceForOnePage/2) / distanceForOnePage,
 			activePageScroll = activeArea ? (scrollY - activeArea.start) / distanceForOnePage : 0;
 
-    //console.log("old", globalScroll - activePage);
+    console.log('activePageScroll', activePageScroll)
     //console.log("new", activeArea ? (scrollY - activeArea.start) / distanceForOnePage : 0);
 
-    console.log(activeArea.type, activePageScroll);
+    //console.log(activeArea.type, activePageScroll);
 
     var contentTop = 0;
 
@@ -145,17 +145,14 @@ $(function() {
 		});
 		$(sections[activePage]).addClass('active').css({
 			'transform': 'rotateY(' + -90*activePageScroll+ 'deg) translate3d(0,0,' + $(window).width() / 2 +'px)',
-			'opacity': 1
+			'opacity': 2-(activePageScroll* 1.5+ 0.5)
 		});
 
-		$(sections[activePage-1]).addClass('left').css({
-			'transform': 'rotateY(' + (-90*activePageScroll - 90)+ 'deg) translate3d(0,0,' + $(window).width() / 2 +'px)',
-			'opacity':  -activePageScroll*2
-		});
+    console.log('opacity', activePageScroll);
 		$(sections[activePage-2]).addClass('left-outside');
 		$(sections[activePage+1]).addClass('right').css({
 			'transform': 'rotateY(' + (-90*activePageScroll +90)+ 'deg) translate3d(0,0,' + $(window).width() / 2 +'px)',
-			'opacity': activePageScroll*2
+			'opacity': activePageScroll*1.5
 		});
 		$(sections[activePage+2]).addClass('right-outside');
 	}
@@ -217,22 +214,22 @@ $(function() {
           $.data(this, 'scrollTimer', setTimeout(function() {
             var targetScroll = getSnapPosition(activePage,scrollY);
             console.log('targ' + targetScroll, scrollY);
-            if($(body).scrollTop() < targetScroll -1.5 || $(body).scrollTop() > targetScroll + 1.5) {
-            body.animate({scrollTop: targetScroll }, 200, 'swing', function() {
+            if(($(body).scrollTop() < targetScroll -1.5 || $(body).scrollTop() > targetScroll + 1.5) && activeScrollArea.type != "content") {
+              body.animate({scrollTop: targetScroll }, 200, 'swing', function() {
+                body.stop();
+                body.scrollTop(targetScroll);
+                $(document).scrollTop(targetScroll);
+              });
+            }
+            else {
               body.stop();
-              body.scrollTop(targetScroll);
-              $(document).scrollTop(targetScroll);
-            });
-          }
-          else {
-            body.stop();
-            $('body').addClass('snapped');
-            $('body').removeClass('scrolling');
-            //console.log('snapped');
-          }
-        }, 300));
+              $('body').addClass('snapped');
+              $('body').removeClass('scrolling');
+              //console.log('snapped');
+            }
+          }, 300));
+        }
       }
-    }
 
 		if($(body).scrollTop() < 0) {
 			$(body).scrollTop(0);
